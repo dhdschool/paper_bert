@@ -10,7 +10,8 @@ model_path = "microsoft/deberta-base"
 model = AutoModelForSequenceClassification.from_pretrained(
     model_path, 
     num_labels=len(CLASSES),
-    id2label=ID2CLASS, label2id=CLASS2ID,
+    id2label=ID2CLASS,
+    label2id=CLASS2ID,
     problem_type = "multi_label_classification"
 )
 
