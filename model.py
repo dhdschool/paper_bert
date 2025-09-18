@@ -1,4 +1,3 @@
-import torch
 from transformers import TrainingArguments, Trainer, AutoModelForSequenceClassification, DataCollatorWithPadding
 from data import CLASSES, TOKENIZER, TRAIN_DATASET, CLASS2ID, ID2CLASS
 
@@ -7,6 +6,7 @@ dataset = TRAIN_DATASET
 data_collator = DataCollatorWithPadding(tokenizer=TOKENIZER)
 model_path = "microsoft/deberta-base"
 
+# Initialize the untrained deBERTa model
 model = AutoModelForSequenceClassification.from_pretrained(
     model_path, 
     num_labels=len(CLASSES),
