@@ -1,6 +1,15 @@
 from transformers import TrainingArguments, Trainer, AutoModelForSequenceClassification, DataCollatorWithPadding
 from data import CLASSES, TOKENIZER, TRAIN_DATASET, CLASS2ID, ID2CLASS
+import evaluate
 
+# Metrics to compute over the eval dataset
+metrics = evaluate.combine(["accuracy", "f1", "precision", "recall"])
+
+# Function call provided during training
+def compute_metrics(eval_pred):
+   x, y = eval_pred
+   x = (x.sigmoid() > 0.5).astype(int).reshape(-1)
+   return metrics.compute(predictions=x, references=y.astype(int).reshape(-1))
 
 dataset = TRAIN_DATASET
 data_collator = DataCollatorWithPadding(tokenizer=TOKENIZER)
@@ -15,6 +24,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
     problem_type = "multi_label_classification"
 )
 
+# Training hyperparameters
 training_args = TrainingArguments(
    output_dir="./model",
    learning_rate=2e-5,
@@ -34,4 +44,5 @@ trainer = Trainer(
    eval_dataset=dataset["test"],
    processing_class=TOKENIZER,
    data_collator=data_collator,
+   compute_metrics=compute_metrics
 )
