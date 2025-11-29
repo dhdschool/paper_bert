@@ -2,3 +2,4 @@ model/*
 dataset/*
 __pycache__/*
 dist/*
+dist.zip
